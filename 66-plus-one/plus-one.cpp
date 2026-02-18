@@ -19,11 +19,6 @@ public:
             }
             else break;
         }
-        if(digits[digits.size() - 1] == 10)
-        {
-            digits[digits.size() - 1] = 0;
-            digits.push_back(1);
-        }
         reverse(digits.begin(), digits.end());
         return digits;
     }
