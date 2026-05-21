@@ -1,28 +1,77 @@
 class Solution {
 public:
-    int longestCommonPrefix(vector<int>& arr1, vector<int>& arr2) {
-        int maxm = 0;
-        int n = arr1.size();
-        int m = arr2.size();
-        set<string> s;
-        for (int i = 0; i < n; i++) {
-            string s1 = to_string(arr1[i]);
-            for (int j = 0; j < s1.length(); j++) {
-                s.insert(s1.substr(0, j + 1));
+    class TrieNode {
+    public:
+        TrieNode* children[10];
+
+        TrieNode() {
+            for (int i = 0; i < 10; i++) {
+                children[i] = nullptr;
+            }
+        }
+    };
+
+    class Trie {
+    public:
+        TrieNode* root;
+
+        Trie() { root = new TrieNode(); }
+
+        void insert(string pre) {
+
+            TrieNode* node = root;
+
+            for (char c : pre) {
+
+                int n = c - '0';
+
+                if (node->children[n] == nullptr) {
+                    node->children[n] = new TrieNode();
+                }
+
+                node = node->children[n];
             }
         }
 
-        for (int i = 0; i < m; i++) {
-            string s2 = to_string(arr2[i]);
-            int found = 0;
-            for (int j = 0; j < s2.length(); j++) {
-                string sub = s2.substr(0, j + 1);
-                if (s.find(sub) != s.end()) {
-                    found = sub.length();
+        int search(string s) {
+
+            TrieNode* node = root;
+
+            int count = 0;
+
+            for (char c : s) {
+
+                int n = c - '0';
+
+                if (node->children[n] != nullptr) {
+                    count++;
+                    node = node->children[n];
+                } else {
+                    break;
                 }
-                maxm = max(maxm, found);
             }
+
+            return count;
         }
+    };
+
+    int longestCommonPrefix(vector<int>& arr1, vector<int>& arr2) {
+
+        Trie trie;
+
+        for (int x : arr1) {
+            trie.insert(to_string(x));
+        }
+
+        int maxm = 0;
+
+        for (int x : arr2) {
+
+            int len = trie.search(to_string(x));
+
+            maxm = max(maxm, len);
+        }
+
         return maxm;
     }
 };
