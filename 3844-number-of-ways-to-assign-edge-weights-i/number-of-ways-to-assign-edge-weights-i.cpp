@@ -11,6 +11,20 @@ public:
         }
         return depth;
     }
+    long long powmod(long long base, long long exp, long long mod) {
+        long long result = 1;
+
+        while (exp > 0) {
+            if (exp & 1) {
+                result = (result * base) % mod;
+            }
+
+            base = (base * base) % mod;
+            exp >>= 1;
+        }
+
+        return result;
+    }
     int assignEdgeWeights(vector<vector<int>>& edges) {
         int mod = 1e9 + 7;
         vector<vector<int>> adjacencyList(edges.size() + 2);
@@ -25,6 +39,6 @@ public:
         for (int i = 1; i < depth; i++) {
             ans = (ans * 2) % mod;
         }
-        return (int)ans;
+        return (depth <= 1) ? 1 : powmod(2, depth - 1, mod);
     }
 };
